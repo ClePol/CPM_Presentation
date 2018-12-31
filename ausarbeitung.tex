@@ -20,7 +20,6 @@
 
         Diese Ausarbeitung beschäftigt sich zunächst mit der Fragestellung der Pose Estimation. Als erster Lösungsansatz werden Pose Machines von Ramakrishna et al.~\cite{ramakrishna2014pose} betrachtet. Der Kern der Arbeit ist die Untersuchung der Architektur von Convolutional Pose Machines~\cite{conv_pose} und den damit verbundenen Designentscheidungen.
         %TODO: when quotes?
-        test124\cite{jj2}
 
 \section{Pose estimation} \label{sec:pose_estimation}
 	Eine Pose ist nach der DIN EN ISO 8373 (Industrieroboter Wörterbuch) eine Kombination von Position und Orientierung im dreidimensionalen Raum. In diesem Fall wird das Problem der Posen-Schätzung von Menschen in unterschiedlichen Bildern betrachtet. Das bedeutet: Die erkannten Posen werden zunächst nur zweidimensional erfasst. Im Bereich der Computer Vision werden Posen oft durch sogenannte Schlüsselpunkte dargestellt. Aus diesen Schlüsselpunkten kann man dann ein grobes Skelett zusammenfügen, dass die Pose des Menschen visualisieren kann (siehe Grafik~\ref{fig:hard_pose}).
@@ -37,14 +36,14 @@
         \item Rechtes \& Linkes Knie
         \item Rechter \& Linker Knöchel
         \end{itemize}
-        Zusammen mit dem Label für den Hintergrund gibt es in diesem Datensatz demzufolge 15 Label. In anderen Fällen können auch mehr Punkte nötig sein~\cite{COCO 2018 Keypoint Detection Task}.
+        Zusammen mit dem Label für den Hintergrund gibt es in diesem Datensatz demzufolge 15 Label. In anderen Fällen können auch mehr Punkte nötig sein~\cite{lin2014microsoft}.
         \begin{figure}[!hbt]
                 \includegraphics[width=0.4\columnwidth]{hardpose_1.png}
                 \includegraphics[width=0.35\columnwidth]{hardpose_2.png}
-                \caption{Beispiele für schwierigen Posen aus~\cite{DeepPose: Human Pose Estimation via Deep Neural Networks}}
+                \caption{Beispiele für schwierigen Posen aus~\cite{toshev2014deeppose}}
                 \label{fig:hard_pose}
         \end{figure}
-        In Grafik~\ref{fig:hard_pose} sieht man Beispiele, wo das erkennen von Schlüsselpunkten sehr schwierig ist. Einige Schlüsselpunkte, wie der Ellenbogen, sind überhaupt nicht sichtbar und können nur durch holistisches, logisches Denken erkannt werden.~\cite{DeepPose: Human Pose Estimation via Deep Neural Networks} Außerdem sind die Winkel aus denen Personen abgebildet sein können sehr unterschiedlich und die Gliedmaßen folgen keinen einfachen Anordnungsmustern.
+        In Grafik~\ref{fig:hard_pose} sieht man Beispiele, wo das erkennen von Schlüsselpunkten sehr schwierig ist. Einige Schlüsselpunkte, wie der Ellenbogen, sind überhaupt nicht sichtbar und können nur durch holistisches, logisches Denken erkannt werden.~\cite{toshev2014deeppose} Außerdem sind die Winkel aus denen Personen abgebildet sein können sehr unterschiedlich und die Gliedmaßen folgen keinen einfachen Anordnungsmustern.
 
 
 \section{Pose Machines und andere Algorithmen zur Posen-Schätzung}
@@ -76,7 +75,7 @@
         Wie zuvor beschrieben, produzieren die weiteren Klassifizerer $g_t$ eine Ausgabe mit gleichem Format und gleicher Bedeutung, erhalten aber zusätzlich zur Bildinformation $x_z$ noch die Ergebnisse der Kontext-Merkmalfunktion $\psi_t$:
         \[ g_t(x_z,\psi_t(z,b_{t-1})) \rightarrow \{b_{1}^{p}(Y_p = z) \}_{p \in \{0 \ldots P\}} \] 
 
-        In der Arbeit von Ramakrishna et al.~\cite{ramakrishna2014pose} werden als Klassifizerer $g$ boosted random forests ~\cite{Breiman2001, Friedman2001, Caruana et al. 2009} gewählt. Zur Feature Extraction wird die Histogram of oriented Gradients (HoG) Methode~\cite{HoG} verwendet.
+        In der Arbeit von Ramakrishna et al.~\cite{ramakrishna2014pose} werden als Klassifizerer $g$ boosted random forests ~\cite{breiman2001,friedman2001greedy} gewählt. Zur Feature Extraction wird die Histogram of oriented Gradients (HoG) Methode~\cite{dalal2005histograms} verwendet.
 
 \section{Convolutional Pose Machines}\label{subsec:Intro}
 	In der Arbeit von Wei at al.~\cite{conv_pose} wird der Klassifizerer der Pose Machines durch eine "Deep Convolutional Architecture" ersetzt. Dadurch müssen keine Merkmale $x_z$ statisch aus dem Bild extrahiert werden und auch keine handgemachten Kontext-Merkmalfunktionen zum Einsatz kommen. Stattdessen ermöglicht es die Architektur, sowohl Merkmale des Kontext, als auch des Bildes selbst, direkt zu lernen. Außerdem können alle Stufen und damit alle Klassifizerer zusammen trainiert werden, weil die Architektur komplett differenzierbar ist. Bei Random Forests ist das nicht möglich~\cite{ramakrishna2014pose}.
@@ -103,11 +102,11 @@
         Die Kontext-Merkmalfunktion $\psi_t$ fällt bei den Convolutional Pose Machines weg, da auch dieses Verhalten antrainiert werden kann (siehe Abschnitt~\ref{subsec:kontext}). Deshalb wird die Belief Map direkt mit dem Ergebnis der Merkmalextrahierung $x'$ addiert und mit 5 weiteren Convolutional Layern zu einer neuen Belief Map verarbeitet. 
 
 \subsection{Merkmale im Kontext}\label{subsec:kontext}
-        Wie in den Pose Machines ist das Ziel der Convolutional Pose Machines, lokale Merkmale mit Umgebungsmerkmalen zu Verbinden. Die neue Architektur kann Vorteile von Deep Learning Methoden~\cite{TODO} und Graph basierten Methoden~\cite{TODO} verbinden. %TODO: fraglich
+        Wie in den Pose Machines ist das Ziel der Convolutional Pose Machines, lokale Merkmale mit Umgebungsmerkmalen zu Verbinden. Die neue Architektur kann Vorteile von Deep Learning Methoden~\cite{toshev2014deeppose} und Graph basierten Methoden~\cite{andriluka2009pictorial,LanWM11} verbinden. %TODO: fraglich
         In Grafik~\ref{fig:conv_pose_machine}, Abschnitt $e)$ sieht man, dass das rezeptive Feld des Netzwerkes durch die Faltungen wächst. So werden mehr und mehr Merkmale einbezogen, die nicht in unmittelbarer Nähe des untersuchten Punktes sind. Diese Aufgabe hatte bei den Pose Machines die handgemachte Funktion $\psi$. Im Idealfall kombiniert das Netzwerk die Informationen über Vorhersagen von anderen Schlüsselpunkten und Merkmalextrahierung besser als $\psi$ zuvor.
 
-        Das rezeptive Feld eines Convolutional Neural Networks ist der Bereich auf dem Ausgangsbild, der Einfluss auf die Ausgabe des jeweiligen Layers hat. Dabei nimmt der Einfluss vom Zentrum zu den Randbereichen exponentiell ab~\cite{A guide to convolution arithmetic for deep learning}. 
-        Die Größe des Feldes kann mit folgender Formel berechnet werden~\cite{A guide to convolution arithmetic for deep learning}:
+        Das rezeptive Feld eines Convolutional Neural Networks ist der Bereich auf dem Ausgangsbild, der Einfluss auf die Ausgabe des jeweiligen Layers hat. Dabei nimmt der Einfluss vom Zentrum zu den Randbereichen exponentiell ab~\cite{dumoulin2016guide}. 
+        Die Größe des Feldes kann mit folgender Formel berechnet werden~\cite{dumoulin2016guide}:
         \[ r_{out} = r_{in} + (kernel-1) * d_{in}\]
         \[ d_{out} = d_{in} * stride\]
         Dabei ist $r$ das rezeptive Feld, und $d$ die Distanz zwischen zwei Merkmalen. $stride$ ist die Schrittweite und $kernel$ ist die Kernelgröße der Convolution im jeweiligen Layer. Die Feldgröße kann so rekursiv für alle Layer berechnet werden.
@@ -144,7 +143,7 @@
 
 \subsection{Training und Vanishing Gradients} \label{subsec:vanishing_gradients}
 
-        Die Architektur einer Convolutional Pose Machine kann viele Convolutional Layer enthalten. Diese Tiefe ist ein Problem, denn es können sogenannte Vanishing Gradients auftreten~\cite{vanishing_gradients}. Das heißt, dass bei der Back-Propagation die Gradienten der Layer zwischen Ein- und Ausgabe immer kleiner werden und praktisch "verschwinden". Ein effizientes Training ist dann nicht mehr möglich.
+        Die Architektur einer Convolutional Pose Machine kann viele Convolutional Layer enthalten. Diese Tiefe ist ein Problem, denn es können sogenannte Vanishing Gradients auftreten~\cite{pascanu2013difficulty}. Das heißt, dass bei der Back-Propagation die Gradienten der Layer zwischen Ein- und Ausgabe immer kleiner werden und praktisch "verschwinden". Ein effizientes Training ist dann nicht mehr möglich.
 
         Durch die Architektur der Pose Machines kann die Anzahl der Layer zwischen Input und Output jedoch reduziert werden. Dazu dienen die Verlustfunktionen nach jeder Stufe. Sie erzwingen die Ausgabe der Belief Maps und sorgen damit dafür, dass auch in den Layern der mitteleren Stufen Ergebnisse erzeugt werden und die Gradienten nicht verschwinden. Im folgenden wird diese Taktik Intermediate Supervision genannt.
 
@@ -152,15 +151,15 @@
 
 \subsection{Die beste Konfiguration}
         
-        Nach den bereits diskutierten Designentscheidungen wurde die Anzahl der Stufen experimentell optimiert. Bei Tests auf dem Leeds Sports Pose Dataset\footnote{mit person centric annotations (PC)}~\cite{LSP_dataset} ergab sich, dass mehr Stufen grundsätzlich eine höhere Genauigkeit ergeben. Allerdings verbessert sich die Genauigkeit immer geringer, je mehr Stufen es gibt. Die Autoren haben sich entschieden eine 6 stufige Architektur zu evaluieren. Sie benutzen normalisierte Eingabebilder mit der Größe 368x368 Pixel. Dabei werden die Ursprungsbilder zuerst skaliert und anhand von Größe und Schlüsselpunkten zugeschnitten oder gepaddet. Es wurden außerdem unterschiedliche Trainingsmethoden getestet, wobei sich das Ende-zu-Ende Training als bestes heraustellte.
+        Nach den bereits diskutierten Designentscheidungen wurde die Anzahl der Stufen experimentell optimiert. Bei Tests auf dem Leeds Sports Pose Dataset\footnote{mit person centric annotations (PC)}~\cite{LSP} ergab sich, dass mehr Stufen grundsätzlich eine höhere Genauigkeit ergeben. Allerdings verbessert sich die Genauigkeit immer geringer, je mehr Stufen es gibt. Die Autoren haben sich entschieden eine 6 stufige Architektur zu evaluieren. Sie benutzen normalisierte Eingabebilder mit der Größe 368x368 Pixel. Dabei werden die Ursprungsbilder zuerst skaliert und anhand von Größe und Schlüsselpunkten zugeschnitten oder gepaddet. Es wurden außerdem unterschiedliche Trainingsmethoden getestet, wobei sich das Ende-zu-Ende Training als bestes heraustellte.
 
 \section{Evaluation}
 
-        Diese Seminararbeit beschränkt sich auf die Evaluation mit dem prominentesten Datensatz, das MPII Humand Pose Dataset~\cite{Mpii_dataset}. Der Datensatz besteht aus mehr als 28000 Trainingsbildern. Für das Training wurden die Daten Augmentiert. Dabei wurden zufällig Rotationswinkel [-40\degree,40\degree], Skalierungsfaktoren [0.7,1.3] und horizontales Spiegeln verwendet. Als Metrik wird die PCKh Metrik~\cite{PCKh} verwendet. %TODO: was ist das?
+        Diese Seminararbeit beschränkt sich auf die Evaluation mit dem prominentesten Datensatz, das MPII Humand Pose Dataset~\cite{MPII}. Der Datensatz besteht aus mehr als 28000 Trainingsbildern. Für das Training wurden die Daten Augmentiert. Dabei wurden zufällig Rotationswinkel [-40\degree,40\degree], Skalierungsfaktoren [0.7,1.3] und horizontales Spiegeln verwendet. Als Metrik wird die PCKh Metrik verwendet. %TODO: was ist das? - cite
         Weil in diesem Datensatz auch mehrere Personen auf einem Bild sichtbar sein können, wurden zwei Sets von Belief Maps für das Training erstellt. Eine enthält alle Peaks für jede Person in der Nähe der Hauptperson. Die Zweite enthält nur Peaks für die Schlüsselpunkte der Hauptperson.
         Die erste Art von Belief Maps wird für die Verlustfunktion der ersten Stufe verwendet, weil hier nur lokale Zusammenhänge erlernt werden. In allen weiteren Stufen wird das zweite Set verwendet, um geometritsche Relationen zwischen den Peaks richtig abzubilden.
 
-        Das Ergebnis nach der PCKh-0.5 Metrik war zur Zeit der Veröffentlichung State of the Art mit einer Detektionsrate von 88.0\%. Wenn zusätzlich noch der Leeds Sport Pose Datensatz zum Training benutzt wurde, kam das Netzwerk auf ein Ergebnis von 88.5\%. 2016 war dieses Ergebnis mehr als 6\% besser als vergleichbare Methoden. Zur Zeit dieser Seminararbeit befindet sich die Convolutional Pose Machine auf Platz 12 in der offiziellen Rangliste~\cite{Mpii_dataset}. State of the Art ist Tang et al.~\cite{Deeply Learned Compositional Models for Human Pose Estimation} mit einer Wertung von 92.3\%
+        Das Ergebnis nach der PCKh-0.5 Metrik war zur Zeit der Veröffentlichung State of the Art mit einer Detektionsrate von 88.0\%. Wenn zusätzlich noch der Leeds Sport Pose Datensatz zum Training benutzt wurde, kam das Netzwerk auf ein Ergebnis von 88.5\%. 2016 war dieses Ergebnis mehr als 6\% besser als vergleichbare Methoden. Zur Zeit dieser Seminararbeit befindet sich die Convolutional Pose Machine auf Platz 12 in der offiziellen Rangliste~\cite{MPII}. State of the Art ist Tang et al.~\cite{tang2018deeply} mit einer Wertung von 92.3\%
         
 \section{Fazit und aktuelle Arbeiten}
         Die Convolutional Pose Machines entstanden aus der Kombination von neuen Deep Learning Techniken und der Idee, Kontext über ein Stufenmodell erlernen zu lassen. Die Autoren haben im Jahr 2017 ein bedeutendes Paper im Bereich des Multiple People Tracking veröffentlicht, das die hier dargestellten Ansätze weiter verfolgt~\cite{cao2017realtime,wei2016cpm}. Die Ideen der Intermediate Supervision sind immer noch relevant. Allerdings gibt es auch Methoden, wie zum Beispiel Batch Normalization, die nicht im Paper über Convolutional Pose Machines betrachtet wurden. Da sich das Feld des Maschinellen Lernens sehr schnell bewegt, sind die Ergebnisse zwar deutlich überboten worden, aber trotzdem von Bedeutung.
