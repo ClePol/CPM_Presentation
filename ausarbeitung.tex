@@ -5,6 +5,7 @@
 \usepackage{amsfonts}
 \usepackage{gensymb}
 
+
 \begin{document}
 	\title{Convolutional Pose Machines}
 	\author{Clemens Pollak
@@ -19,6 +20,7 @@
 
         Diese Ausarbeitung beschäftigt sich zunächst mit der Fragestellung der Pose Estimation. Als erster Lösungsansatz werden Pose Machines von Ramakrishna et al.~\cite{ramakrishna2014pose} betrachtet. Der Kern der Arbeit ist die Untersuchung der Architektur von Convolutional Pose Machines~\cite{conv_pose} und den damit verbundenen Designentscheidungen.
         %TODO: when quotes?
+        test124\cite{jj2}
 
 \section{Pose estimation} \label{sec:pose_estimation}
 	Eine Pose ist nach der DIN EN ISO 8373 (Industrieroboter Wörterbuch) eine Kombination von Position und Orientierung im dreidimensionalen Raum. In diesem Fall wird das Problem der Posen-Schätzung von Menschen in unterschiedlichen Bildern betrachtet. Das bedeutet: Die erkannten Posen werden zunächst nur zweidimensional erfasst. Im Bereich der Computer Vision werden Posen oft durch sogenannte Schlüsselpunkte dargestellt. Aus diesen Schlüsselpunkten kann man dann ein grobes Skelett zusammenfügen, dass die Pose des Menschen visualisieren kann (siehe Grafik~\ref{fig:hard_pose}).
@@ -164,9 +166,7 @@
         Die Convolutional Pose Machines entstanden aus der Kombination von neuen Deep Learning Techniken und der Idee, Kontext über ein Stufenmodell erlernen zu lassen. Die Autoren haben im Jahr 2017 ein bedeutendes Paper im Bereich des Multiple People Tracking veröffentlicht, das die hier dargestellten Ansätze weiter verfolgt~\cite{cao2017realtime,wei2016cpm}. Die Ideen der Intermediate Supervision sind immer noch relevant. Allerdings gibt es auch Methoden, wie zum Beispiel Batch Normalization, die nicht im Paper über Convolutional Pose Machines betrachtet wurden. Da sich das Feld des Maschinellen Lernens sehr schnell bewegt, sind die Ergebnisse zwar deutlich überboten worden, aber trotzdem von Bedeutung.
 
 
-\begin{thebibliography}{5}
-	\bibitem{ASDF}
-	TODO
-\end{thebibliography}
+\bibliographystyle{IEEEtran}
+\bibliography{ausarbeitung}
 
 \end{document}
