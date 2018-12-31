@@ -4,7 +4,7 @@
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{gensymb}
-
+\usepackage[ngerman]{babel}
 
 \begin{document}
 	\title{Convolutional Pose Machines}
@@ -22,7 +22,7 @@
         %TODO: when quotes?
 
 \section{Pose estimation} \label{sec:pose_estimation}
-	Eine Pose ist nach der DIN EN ISO 8373 (Industrieroboter Wörterbuch) eine Kombination von Position und Orientierung im dreidimensionalen Raum. In diesem Fall wird das Problem der Posen-Schätzung von Menschen in unterschiedlichen Bildern betrachtet. Das bedeutet: Die erkannten Posen werden zunächst nur zweidimensional erfasst. Im Bereich der Computer Vision werden Posen oft durch sogenannte Schlüsselpunkte dargestellt. Aus diesen Schlüsselpunkten kann man dann ein grobes Skelett zusammenfügen, dass die Pose des Menschen visualisieren kann (siehe Grafik~\ref{fig:hard_pose}).
+	Eine Pose ist nach der DIN EN ISO 8373 (Industrieroboter Wörterbuch) eine Kombination von Position und Orientierung im dreidimensionalen Raum. In diesem Fall wird das Problem der Posen-Schätzung von Menschen in unterschiedlichen Bildern betrachtet. Das bedeutet: Die erkannten Posen werden zunächst nur zweidimensional erfasst. Im Bereich der Computer Vision werden Posen oft durch sogenannte Schlüsselpunkte dargestellt. Aus diesen Schlüsselpunkten kann man dann ein grobes Skelett zusammenfügen, dass die Pose des Menschen visualisieren kann (siehe Abbildung~\ref{fig:hard_pose}).
         Für das Benchmark des MPII Datensatzes~\cite{MPII} 
         werden zum Beispiel folgende Schlüsselpunkte erwartet:
         \begin{itemize}
@@ -43,14 +43,14 @@
                 \caption{Beispiele für schwierigen Posen aus~\cite{toshev2014deeppose}}
                 \label{fig:hard_pose}
         \end{figure}
-        In Grafik~\ref{fig:hard_pose} sieht man Beispiele, wo das erkennen von Schlüsselpunkten sehr schwierig ist. Einige Schlüsselpunkte, wie der Ellenbogen, sind überhaupt nicht sichtbar und können nur durch holistisches, logisches Denken erkannt werden.~\cite{toshev2014deeppose} Außerdem sind die Winkel aus denen Personen abgebildet sein können sehr unterschiedlich und die Gliedmaßen folgen keinen einfachen Anordnungsmustern.
+        In Abbildung~\ref{fig:hard_pose} sieht man Beispiele, wo das erkennen von Schlüsselpunkten sehr schwierig ist. Einige Schlüsselpunkte, wie der Ellenbogen, sind überhaupt nicht sichtbar und können nur durch holistisches, logisches Denken erkannt werden.~\cite{toshev2014deeppose} Außerdem sind die Winkel aus denen Personen abgebildet sein können sehr unterschiedlich und die Gliedmaßen folgen keinen einfachen Anordnungsmustern.
 
 
 \section{Pose Machines und andere Algorithmen zur Posen-Schätzung}
         Um die angesprochenen Probleme zu lösen, gibt es einige unterschiedliche Ansätze. %TODO: how much here?
         Die Idee der Convolutional Pose Machines~\cite{conv_pose} geht auf die Pose Machines~\cite{ramakrishna2014pose} zurück. Es handelt sich um eine Reihe von Klassifizierern, die von vorhergegangenen Fehlern lernen um immer bessere Schätzungen für Schlüsselpunkte zu erzeugen. 
 
-        In der ersten Stufe produziert ein Klassifizierer\footnote{Wenn hier von Klassifizern gesprochen wird, dann handelt es sich immer um einen Multi-Klassen Klassifizierer, der für alle benötigten Schlüsselpositionen Schätzungen durchführen kann} initiale Schätzungen für die Position aller Schlüsselpunkte. Die Ausgabe sind sogenannte Belief Maps (siehe Grafik~\ref{fig:pose_machine}). Die Klassifizierer in den weiteren Stufen lernen die Belief Maps des vorigen Klassifizierer zu korrigieren, indem sie von vorigen Fehlern lernen. Idealerweise entstehen am Ende dann Belief Maps die klare Spitzen an den Stellen haben, die den Schlüsselpunkten im Originalbild entsprechen.
+        In der ersten Stufe produziert ein Klassifizierer\footnote{Wenn hier von Klassifizern gesprochen wird, dann handelt es sich immer um einen Multi-Klassen Klassifizierer, der für alle benötigten Schlüsselpositionen Schätzungen durchführen kann} initiale Schätzungen für die Position aller Schlüsselpunkte. Die Ausgabe sind sogenannte Belief Maps (siehe Abbildung~\ref{fig:pose_machine}). Die Klassifizierer in den weiteren Stufen lernen die Belief Maps des vorigen Klassifizierer zu korrigieren, indem sie von vorigen Fehlern lernen. Idealerweise entstehen am Ende dann Belief Maps die klare Spitzen an den Stellen haben, die den Schlüsselpunkten im Originalbild entsprechen.
 
         \begin{figure}[!hbt]
                 \begin{center}
@@ -88,7 +88,7 @@
                 \end{center}
         \end{figure}
 
-        In Grafik~\ref{fig:conv_pose_machine} sieht man die Architektur der Convolutional Pose Machines. Insbesondere kann man sehen, dass die Merkmalextrahierung durch Convolutional Layer und Pooling Layer ersetzt wurde. Dabei wird in der ersten Stufe eine andere Struktur zur Extrahierung verwendet als bei den folgenden Stufe. (siehe Grafik~\ref{fig:conv_pose_machine}, Teil $d$, Markierung $x'$) Bei einfachen Pose Machines bleibt die Extrahierung immer gleich. 
+        In Abbildung~\ref{fig:conv_pose_machine} sieht man die Architektur der Convolutional Pose Machines. Insbesondere kann man sehen, dass die Merkmalextrahierung durch Convolutional Layer und Pooling Layer ersetzt wurde. Dabei wird in der ersten Stufe eine andere Struktur zur Extrahierung verwendet als bei den folgenden Stufe. (siehe Abbildung~\ref{fig:conv_pose_machine}, Teil $d$, Markierung $x'$) Bei einfachen Pose Machines bleibt die Extrahierung immer gleich. 
 
         In der ersten Stufe werden nach den Layern, die die Extrahierung ersetzen noch drei weitere Convolutional Layer angehängt, die anstelle des Klassifizierers stehen. Zusammen kann dieses Faltungsnetzwerk eine Belief Map erstellen, indem die Funktion der Feature Extrahierung und des Belief Mapping antrainiert wird. Dazu befindet sich nach jeder Stufe eine Verlustfunktion $f_{t}$.
 
@@ -103,7 +103,7 @@
 
 \subsection{Merkmale im Kontext}\label{subsec:kontext}
         Wie in den Pose Machines ist das Ziel der Convolutional Pose Machines, lokale Merkmale mit Umgebungsmerkmalen zu Verbinden. Die neue Architektur kann Vorteile von Deep Learning Methoden~\cite{toshev2014deeppose} und Graph basierten Methoden~\cite{andriluka2009pictorial,LanWM11} verbinden. %TODO: fraglich
-        In Grafik~\ref{fig:conv_pose_machine}, Abschnitt $e)$ sieht man, dass das rezeptive Feld des Netzwerkes durch die Faltungen wächst. So werden mehr und mehr Merkmale einbezogen, die nicht in unmittelbarer Nähe des untersuchten Punktes sind. Diese Aufgabe hatte bei den Pose Machines die handgemachte Funktion $\psi$. Im Idealfall kombiniert das Netzwerk die Informationen über Vorhersagen von anderen Schlüsselpunkten und Merkmalextrahierung besser als $\psi$ zuvor.
+        In Abbildung~\ref{fig:conv_pose_machine}, Abschnitt $e)$ sieht man, dass das rezeptive Feld des Netzwerkes durch die Faltungen wächst. So werden mehr und mehr Merkmale einbezogen, die nicht in unmittelbarer Nähe des untersuchten Punktes sind. Diese Aufgabe hatte bei den Pose Machines die handgemachte Funktion $\psi$. Im Idealfall kombiniert das Netzwerk die Informationen über Vorhersagen von anderen Schlüsselpunkten und Merkmalextrahierung besser als $\psi$ zuvor.
 
         Das rezeptive Feld eines Convolutional Neural Networks ist der Bereich auf dem Ausgangsbild, der Einfluss auf die Ausgabe des jeweiligen Layers hat. Dabei nimmt der Einfluss vom Zentrum zu den Randbereichen exponentiell ab~\cite{dumoulin2016guide}. 
         Die Größe des Feldes kann mit folgender Formel berechnet werden~\cite{dumoulin2016guide}:
@@ -125,7 +125,7 @@
         \end{figure}
 
         Wie in Sektion~\ref{sec:pose_estimation} erläutert, sind Schlüsselpunkte, die weit vom Rumpf entfernt sind, schwer zu erkennen. 
-        In Grafik~\ref{fig:receptive_field} sieht man, dass das rezeptive Feld andere Peaks in den Belief Maps einschließt. Dadurch kann die Information über die Morphologie des Köpers genutzt werden, um schlechte Schätzungen zu korrigieren. In diesem Fall könnte zum Beispiel die korrekte Erkennung von Kopf, Schulter und Nacken dazu beigetragen haben, die Position des Ellenbogens in der zweiten Stufe zu verschieben. Man kann außerdem beobachten, dass der Peak, welcher sich an der falschen Stelle befindet, deutlich breiter ist als andere. Dies kann eine "Unsicherheit" in der Schätzung bedeuten.
+        In Abbildung~\ref{fig:receptive_field} sieht man, dass das rezeptive Feld andere Peaks in den Belief Maps einschließt. Dadurch kann die Information über die Morphologie des Köpers genutzt werden, um schlechte Schätzungen zu korrigieren. In diesem Fall könnte zum Beispiel die korrekte Erkennung von Kopf, Schulter und Nacken dazu beigetragen haben, die Position des Ellenbogens in der zweiten Stufe zu verschieben. Man kann außerdem beobachten, dass der Peak, welcher sich an der falschen Stelle befindet, deutlich breiter ist als andere. Dies kann eine "Unsicherheit" in der Schätzung bedeuten.
 
         Diese qualitativen Beobachtungen wurden durch Experimente bestätigt, indem das rezeptive Feld bei gleicher Parameteranzahl vergrößert wurde. Es kam zu einer signifikanten Verbesserung der Genauigkeit~\cite{conv_pose}.
         %TODO: more here?
@@ -147,7 +147,7 @@
 
         Durch die Architektur der Pose Machines kann die Anzahl der Layer zwischen Input und Output jedoch reduziert werden. Dazu dienen die Verlustfunktionen nach jeder Stufe. Sie erzwingen die Ausgabe der Belief Maps und sorgen damit dafür, dass auch in den Layern der mitteleren Stufen Ergebnisse erzeugt werden und die Gradienten nicht verschwinden. Im folgenden wird diese Taktik Intermediate Supervision genannt.
 
-        Das Problem der Vanishing Gradients kann auch experimentell gezeigt werden. In Grafik~\ref{fig:intermediate_supervision} kann man Gradienten von 9 beispielhaft ausgewählten Layern sehen und deren Veränderung über drei Epochen des Trainings. In Schwarz ist die normale Architektur und in Rot eine Trainingslauf ohne Intermediate Supervision dargestellt. Man kann deutlich erkennen, dass die Varianz der Gradienten im Fall ohne Intermediate Supervision sehr klein ist. Die Gradienten bewegen sich um Null. Das heißt: Die Neuronen dieser Layer werden wenig Informationen weitergeben und tragen wenig zur Klassifizierung bei. Veränderungen finden hautpsächlich in den letzten Layern statt. Im Fall mit Intermediate Supervision ist die Varianz deutlich größer und scheint nur langsam über die Epochen zu sinken. Das gilt für alle dargestellten Layer, auch jene welche nicht direkt vor einer Verlustfunktion stehen. Die intermediate supervsion scheint folglich in einem guten Abstand eingesetzt zu sein.
+        Das Problem der Vanishing Gradients kann auch experimentell gezeigt werden. In Abbildung~\ref{fig:intermediate_supervision} kann man Gradienten von 9 beispielhaft ausgewählten Layern sehen und deren Veränderung über drei Epochen des Trainings. In Schwarz ist die normale Architektur und in Rot eine Trainingslauf ohne Intermediate Supervision dargestellt. Man kann deutlich erkennen, dass die Varianz der Gradienten im Fall ohne Intermediate Supervision sehr klein ist. Die Gradienten bewegen sich um Null. Das heißt: Die Neuronen dieser Layer werden wenig Informationen weitergeben und tragen wenig zur Klassifizierung bei. Veränderungen finden hautpsächlich in den letzten Layern statt. Im Fall mit Intermediate Supervision ist die Varianz deutlich größer und scheint nur langsam über die Epochen zu sinken. Das gilt für alle dargestellten Layer, auch jene welche nicht direkt vor einer Verlustfunktion stehen. Die intermediate supervsion scheint folglich in einem guten Abstand eingesetzt zu sein.
 
 \subsection{Die beste Konfiguration}
         
@@ -166,6 +166,7 @@
 
 
 \bibliographystyle{IEEEtran}
+\renewcommand\bibname{Literatur}
 \bibliography{ausarbeitung}
 
 \end{document}
