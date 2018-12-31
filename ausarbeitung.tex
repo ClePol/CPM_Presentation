@@ -64,7 +64,7 @@
         Formal ist die Pose Machine definiert als eine Reihe von Klassifizierern $g_t$, wobei $g_1$ als eingabe nur das Eingabebild $x$ erhält. Jeder Klassifizierern erzeugt eine Matrix $b_{t}\in\mathbb{R}^{x*w*(P+1)}$. Dabei sind $h$ und $w$, Höhe und Breite des Bildes. P ist die Anzahl der Schlüsselpunkte. (P wird um Eins erhöht, weil der Hintergrund ebenfalls seperat erkannt wird)
 
         Die Ergebnisse $b_t$ dienen als Eingabe in die nächste Stufe. 
-        Um die Informationen aus allen Belief Maps zu verarbeiten, wird auf $b_t$ eine Kontext-Merkmalfunktion $\psi_t$ angewendet. Diese verbindet "Context Patch Features" zum groben Erkennen der Konfidenz umliegender Schätzungen und "Context Offset Features" zum genauen Aufnehmen von relativen Postionsinformationen (das heißt relativ zu anderen Schätzungen). Die genaue Formel ist an dieser Stelle nicht zum Verstädnis relevant. %TODO: aber interessant?
+        Um die Informationen aus allen Belief Maps zu verarbeiten, wird auf $b_t$ eine Kontext-Merkmalfunktion $\psi_t$ angewendet. Diese verbindet "Context Patch Features" zum groben Erkennen der Konfidenz umliegender Schätzungen und "Context Offset Features" zum genauen Aufnehmen von relativen Postionsinformationen (das heißt relativ zu anderen Schätzungen). Die genaue Formel ist an dieser Stelle nicht zum Verständis relevant. %TODO: aber interessant?
 
         Die entstandene neue Belief Map wird dann mit dem Augangsbild addiert und bildet die Eingabe für den Klassifizierer der nächsten Stufe. In der finalen Stufe werden die Belief Maps dann auf Spitzen untersucht und anhand dessen die Positionen der Körperteile festgelegt.
 
@@ -78,7 +78,7 @@
         In der Arbeit von Ramakrishna et al.~\cite{ramakrishna2014pose} werden als Klassifizerer $g$ boosted random forests ~\cite{breiman2001,friedman2001greedy} gewählt. Zur Feature Extraction wird die Histogram of oriented Gradients (HoG) Methode~\cite{dalal2005histograms} verwendet.
 
 \section{Convolutional Pose Machines}\label{subsec:Intro}
-	In der Arbeit von Wei at al.~\cite{conv_pose} wird der Klassifizerer der Pose Machines durch eine "Deep Convolutional Architecture" ersetzt. Dadurch müssen keine Merkmale $x_z$ statisch aus dem Bild extrahiert werden und auch keine handgemachten Kontext-Merkmalfunktionen zum Einsatz kommen. Stattdessen ermöglicht es die Architektur, sowohl Merkmale des Kontext, als auch des Bildes selbst, direkt zu lernen. Außerdem können alle Stufen und damit alle Klassifizerer zusammen trainiert werden, weil die Architektur komplett differenzierbar ist. Bei Random Forests ist das nicht möglich~\cite{ramakrishna2014pose}.
+	In der Arbeit von Wei et al.~\cite{conv_pose} wird der Klassifizerer der Pose Machines durch eine "Deep Convolutional Architecture" ersetzt. Dadurch müssen keine Merkmale $x_z$ statisch aus dem Bild extrahiert werden und auch keine handgemachten Kontext-Merkmalfunktionen zum Einsatz kommen. Stattdessen ermöglicht es die Architektur, sowohl Merkmale des Kontext, als auch des Bildes selbst, direkt zu lernen. Außerdem können alle Stufen und damit alle Klassifizerer zusammen trainiert werden, weil die Architektur komplett differenzierbar ist. Bei Random Forests ist das nicht möglich~\cite{ramakrishna2014pose}.
 
         \begin{figure}[!bth]
                 \begin{center}
