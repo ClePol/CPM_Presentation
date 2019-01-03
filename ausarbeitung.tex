@@ -9,7 +9,9 @@
 \begin{document}
 	\title{Convolutional Pose Machines}
 	\author{Clemens Pollak
-	\thanks{Betreuer: Bastian Wandt, Institut f\"ur Informations­verarbeitung, Leibniz Universit\"at, WS 2018/2019.}}
+	\thanks{Betreuer: Bastian Wandt, Institut f\"ur Informations­verarbeitung,
+
+         Leibniz Universit\"at, WS 2018/2019.}}
 	\markboth{Seminar Computer Vision, Szenenanalyse und Codierung}{}
 	\maketitle
 
@@ -112,7 +114,7 @@
         
 
         Ein größeres rezeptives Feld kann folglich durch unterschiedliche Anpassungen erreicht werden. Es können Pooling Operationen ausgeführt werden, die Kernelgröße oder Schrittweite kann erhöht werden, oder es werden mehr Convolutional Layer hinzugefügt.
-        Pooling Layer werden nur zur Feature Extraction verwendet. Deshalb nennt sich das Netzwerk auch Fully Convolutional. Bei den Pooling Operationen werden immer Daten verworfen, was die Genauigkeit sekt.
+        Pooling Layer werden nur zur Feature Extraction verwendet. Deshalb nennt sich das Netzwerk auch Fully Convolutional. Bei den Pooling Operationen werden immer Daten verworfen, was die Genauigkeit senkt.
         Es ist auch möglich die Größe des Feldes durch einen größeren Faltungskernel zu erhöhen. Ein größerer Kernel vergrößert allerdings die Anzahl der Parameter im Netzwerk und verlangsamt es. 
         Aus diesem Grund wird eine Architektur mit vielen Convolutional Layern verwendet. Eine höhere Anzahl von Layern kann das Vanishing Gradient Problem hervorrufen. Da das Vanishing Gradient Problem durch mehrere Verlustfunktionen gedämpft werden kann (siehe Abschnitt~\ref{subsec:vanishing_gradients}), wird die Tiefe des Netzwerkes ausgenutzt. 
 
@@ -152,7 +154,7 @@
 
 \subsection{Die beste Konfiguration}
         
-        Nach den bereits diskutierten Designentscheidungen wurde die Anzahl der Stufen experimentell optimiert. Bei Tests auf dem Leeds Sports Pose Dataset\footnote{mit Person Centric Annotations (PC), d.h. rechts und links bedeutet von der abgebildeten Person aus rechts und links}~\cite{LSP} ergab sich, dass mehr Stufen grundsätzlich eine höhere Genauigkeit ergeben. Allerdings verbessert sich die Genauigkeit immer geringer, je mehr Stufen es gibt. Die Autoren haben sich entschieden eine 6 stufige Architektur zu evaluieren. Sie benutzen normalisierte Eingabebilder mit der Größe 368x368 Pixel. Dabei werden die Ursprungsbilder zuerst skaliert und anhand von Größe und Schlüsselpunkten zugeschnitten oder es werden Pixel hinzugefügt. Es wurden außerdem unterschiedliche Trainingsmethoden getestet, wobei sich das Ende-zu-Ende Training als bestes heraustellte.
+        Nach den bereits diskutierten Designentscheidungen wurde die Anzahl der Stufen experimentell optimiert. Bei Tests auf dem Leeds Sports Pose Dataset\footnote{mit Person Centric Annotations (PC), d.h. rechts und links bedeutet von der abgebildeten Person aus rechts und links}~\cite{LSP} ergab sich, dass mehr Stufen grundsätzlich eine höhere Genauigkeit ergeben. Allerdings verbessert sich die Genauigkeit immer geringer, je mehr Stufen es gibt. Die Autoren haben sich entschieden eine 6 stufige Architektur zu evaluieren. Sie benutzen normalisierte Eingabebilder mit der Größe 368x368 Pixel. Dabei werden die Ursprungsbilder zu erst skaliert und anhand von Größe und Schlüsselpunkten zugeschnitten oder erweitert. Es wurden außerdem unterschiedliche Trainingsmethoden getestet, wobei sich das Ende-zu-Ende Training als bestes heraustellte.
 
 \section{Evaluation}
 
