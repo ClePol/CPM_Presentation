@@ -21,7 +21,7 @@
         Diese Ausarbeitung beschäftigt sich mit der Fragestellung der Pose Estimation. Als erster Lösungsansatz werden Pose Machines von Ramakrishna et al.~\cite{ramakrishna2014pose} betrachtet. Der Kern der Arbeit ist die Untersuchung der Architektur von Convolutional Pose Machines~\cite{conv_pose} und den damit verbundenen Designentscheidungen.
 
 \section{Pose estimation} \label{sec:pose_estimation}
-	Eine Pose ist nach der DIN EN ISO 8373 (Industrieroboter Wörterbuch) eine Kombination von Position und Orientierung im dreidimensionalen Raum. In diesem Fall wird das Problem der Posen-Schätzung von Menschen in unterschiedlichen Bildern betrachtet. Das bedeutet: Die erkannten Posen werden zunächst nur zweidimensional erfasst. Im Bereich der Computer Vision werden Posen oft durch sogenannte Schlüsselpunkte dargestellt. Diese Punkte liegen unter anderen an Gelenken, sodass die Pose komplette Haltung des Köpers beschrieben werden kann.
+	Eine Pose ist nach der DIN EN ISO 8373 (Industrieroboter Wörterbuch) eine Kombination von Position und Orientierung im dreidimensionalen Raum. In diesem Fall wird das Problem der Posen-Schätzung von Menschen in unterschiedlichen Bildern betrachtet. Das bedeutet: Die erkannten Posen werden zunächst nur zweidimensional erfasst. Im Bereich der Computer Vision werden Posen oft durch sogenannte Schlüsselpunkte dargestellt. Diese Punkte liegen unter anderen an Gelenken, sodass durch die Pose die komplette Haltung des Köpers beschrieben werden kann.
         Für das Benchmark des MPII Datensatzes~\cite{MPII} 
         werden zum Beispiel folgende Schlüsselpunkte verwendet:
         \begin{itemize}
@@ -42,14 +42,14 @@
                 \caption{Beispiele für schwierigen Posen aus~\cite{toshev2014deeppose}. Die Schätzung der Posen ist nicht erfolgreich, weil der Winkel der Aufnahme und die Haltung des Menschen entscheidende Merkmale verdecken (z.B. den linken Arm im rechten Bild). Für Menschen ist die Haltung jedoch leicht zu erkennen. Dies lässt vermuten, dass ein holistisches Verständnis des Körpers notwendig ist, um schwierige Posen akkurat zu schätzen.}
                 \label{fig:hard_pose}
         \end{figure}
-        In Abbildung~\ref{fig:hard_pose} sieht man Beispiele, wo das Erkennen von Schlüsselpunkten sehr schwierig ist. Einige Schlüsselpunkte, wie der Ellenbogen, sind überhaupt nicht sichtbar und können nur durch holistisches, logisches Denken erkannt werden.~\cite{toshev2014deeppose} Außerdem sind die Winkel aus denen Personen abgebildet sein können sehr unterschiedlich und die Gliedmaßen folgen keinen simplen Anordnungsmustern (siehe Abbildung~\ref{fig:hard_pose}).
+        In Abbildung~\ref{fig:hard_pose} sieht man Beispiele, wo das Erkennen von Schlüsselpunkten sehr schwierig ist. Einige Schlüsselpunkte, wie der Ellenbogen, sind überhaupt nicht sichtbar und können nur durch holistisches, logisches Denken erkannt werden.~\cite{toshev2014deeppose} Außerdem sind die Winkel, aus denen Personen abgebildet sein können, sehr unterschiedlich und die Gliedmaßen folgen keinen simplen Anordnungsmustern (siehe Abbildung~\ref{fig:hard_pose}).
 
 
 \section{Pose Machines und andere Algorithmen zur Posen-Schätzung}
         Um die angesprochenen Probleme zu lösen, gibt es einige unterschiedliche Ansätze. %TODO: how much here?
         Die Idee der Convolutional Pose Machines~\cite{conv_pose} geht auf die Pose Machines~\cite{ramakrishna2014pose} zurück. Es handelt sich um eine Reihe von Klassifikatoren, die von vorhergegangenen Fehlern lernen, um immer bessere Schätzungen für Schlüsselpunkte zu erzeugen. 
 
-        In der ersten Stufe produziert ein Klassifikator\footnote{Wenn hier von Klassifizern gesprochen wird, dann handelt es sich immer um einen Multi-Klassen Klassifikator, der für alle benötigten Schlüsselpositionen Schätzungen durchführen kann.} initiale Schätzungen für die Position aller Schlüsselpunkte. Die Ausgabe sind sogenannte Belief Maps (siehe Abbildung~\ref{fig:pose_machine}). Die Klassifikator in den weiteren Stufen lernen die Belief Maps des vorigen Klassifikator zu korrigieren, indem sie von vorigen Fehlern lernen. Idealerweise entstehen am Ende dann Belief Maps die klare Maxima an den Stellen haben, die den Schlüsselpunkten im Originalbild entsprechen.
+        In der ersten Stufe produziert ein Klassifikator\footnote{Wenn hier von Klassifikatoren gesprochen wird, dann handelt es sich immer um einen Multi-Klassen-Klassifikator, der für alle benötigten Schlüsselpositionen Schätzungen durchführen kann.} initiale Schätzungen für die Positionen aller Schlüsselpunkte. Die Ausgabe sind sogenannte Belief Maps (siehe Abbildung~\ref{fig:pose_machine}). Die Klassifikatoren in den weiteren Stufen lernen die Belief Maps des jeweils vorigen Klassifikators zu korrigieren, indem sie von vorigen Fehlern lernen. Idealerweise entstehen am Ende dann Belief Maps die klare Maxima an den Stellen haben, die den Schlüsselpunkten im Originalbild entsprechen.
 
         \begin{figure}[!hbt]
                 \begin{center}
@@ -71,13 +71,13 @@
         \[ g_1(x_z) \rightarrow \{b_{1}^{p}(Y_p = z) \}_{p \in \{0 \ldots P\}} \] 
         Das bedeutet, dass aus Merkmalen des Bildes $x_z$ Belief Maps $b$ für jeden Schlüsselpunkt (und Hintergrund) erstellt werden. Diese Belief Maps bilden die geschätzte Wahrscheinlichkeit ab, das die jeweilige Bildposition $Y_p \in Z$ der korrekten Schlüsselpunktpostion $z \in Z$ enspricht. Dabei sei $Z \subset \mathbb{R}_2$ die Gesamtheit aller möglichen Punkte im Bild.
 
-        Wie zuvor beschrieben, produzieren die weiteren Klassifizerer $g_t$ eine Ausgabe mit gleichem Format und gleicher Bedeutung, erhalten aber zusätzlich zur Bildinformation $x_z$ noch die Ergebnisse der Kontext-Merkmalfunktion $\psi_t$:
+        Wie zuvor beschrieben, produzieren die weiteren Klassifikatoren $g_t$ eine Ausgabe mit gleichem Format und gleicher Bedeutung, erhalten aber zusätzlich zur Bildinformation $x_z$ noch die Ergebnisse der Kontext-Merkmalfunktion $\psi_t$:
         \[ g_t(x_z,\psi_t(z,b_{t-1})) \rightarrow \{b_{1}^{p}(Y_p = z) \}_{p \in \{0 \ldots P\}} \] 
 
-        In der Arbeit von Ramakrishna et al.~\cite{ramakrishna2014pose} werden als Klassifizerer $g$ boosted random forests ~\cite{breiman2001,friedman2001greedy} gewählt. Zur Feature Extraction wird die Histogram of oriented Gradients (HoG) Methode~\cite{dalal2005histograms} verwendet.
+        In der Arbeit von Ramakrishna et al.~\cite{ramakrishna2014pose} werden als Klassifikatoren $g$ boosted random forests ~\cite{breiman2001,friedman2001greedy} gewählt. Zur Feature Extraction wird die Histogram of oriented Gradients (HoG) Methode~\cite{dalal2005histograms} verwendet.
 
 \section{Convolutional Pose Machines}\label{subsec:Intro}
-	In der Arbeit von Wei et al.~\cite{conv_pose} wird der Klassifizerer der Pose Machines durch eine Deep Convolutional Architecture ersetzt. Dadurch müssen keine Merkmale $x_z$ statisch aus dem Bild extrahiert werden und auch keine handgemachten Kontext-Merkmalfunktionen zum Einsatz kommen. Stattdessen ermöglicht die Architektur, sowohl Merkmale des Kontext, als auch des Bildes selbst, direkt zu lernen. Außerdem können alle Stufen und damit alle Klassifizerer zusammen trainiert werden, weil die Architektur komplett differenzierbar ist. Bei Random Forests ist das nicht möglich~\cite{ramakrishna2014pose}.
+	In der Arbeit von Wei et al.~\cite{conv_pose} wird der Klassifikator der Pose Machines durch eine Deep Convolutional Architecture ersetzt. Dadurch müssen keine Merkmale $x_z$ statisch aus dem Bild extrahiert werden und auch keine handgemachten Kontext-Merkmalfunktionen zum Einsatz kommen. Stattdessen ermöglicht die Architektur, sowohl Merkmale des Kontextes, als auch des Bildes selbst, direkt zu lernen. Außerdem können alle Stufen und damit alle Klassifikatoren zusammen trainiert werden, weil die Architektur komplett differenzierbar ist. Bei Random Forests ist das nicht möglich~\cite{ramakrishna2014pose}.
 
         \begin{figure}[!bth]
                 \begin{center}
@@ -87,7 +87,7 @@
                 \end{center}
         \end{figure}
 
-        In Abbildung~\ref{fig:conv_pose_machine} sieht man die Architektur der Convolutional Pose Machines. Insbesondere kann man sehen, dass die Merkmalextraktion durch Convolutional Layer und Pooling Layer ersetzt wurde. Dabei wird in der ersten Stufe eine andere Struktur zur Extraktion verwendet als bei den folgenden Stufe (siehe Abbildung~\ref{fig:conv_pose_machine}, Teil $d$, Markierung $x'$). Bei einfachen Pose Machines bleibt die Extraktion immer gleich. 
+        In Abbildung~\ref{fig:conv_pose_machine} sieht man die Architektur der Convolutional Pose Machines. Insbesondere kann man sehen, dass die Merkmalextraktion durch Convolutional Layer und Pooling Layer ersetzt wurde. Dabei wird in der ersten Stufe eine andere Struktur zur Extraktion verwendet als bei den folgenden Stufen (siehe Abbildung~\ref{fig:conv_pose_machine}, Teil $d$, Markierung $x'$). Bei einfachen Pose Machines bleibt die Extraktion immer gleich. 
 
         In der ersten Stufe werden nach den Layern, die die Extraktion ersetzen noch drei weitere Convolutional Layer angehängt, die anstelle des Klassifikators stehen. Zusammen kann dieses Faltungsnetzwerk eine Belief Map erstellen, indem die Funktion der Feature Extraktion und des Belief Mapping antrainiert wird. Dazu befindet sich nach jeder Stufe eine Verlustfunktion $f_{t}$.
 
