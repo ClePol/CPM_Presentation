@@ -5,6 +5,7 @@
 \usepackage{amsfonts}
 \usepackage{gensymb}
 \usepackage[ngerman]{babel}
+\usepackage[utf8]{inputenc}
 
 \begin{document}
 	\title{Convolutional Pose Machines}
@@ -21,7 +22,7 @@
         Diese Ausarbeitung beschäftigt sich mit der Fragestellung der Pose Estimation. Als erster Lösungsansatz werden Pose Machines von Ramakrishna et al.~\cite{ramakrishna2014pose} betrachtet. Der Kern der Arbeit ist die Untersuchung der Architektur von Convolutional Pose Machines~\cite{conv_pose} und den damit verbundenen Designentscheidungen.
 
 \section{Pose estimation} \label{sec:pose_estimation}
-	Eine Pose ist nach der DIN EN ISO 8373 (Industrieroboter Wörterbuch) eine Kombination von Position und Orientierung im dreidimensionalen Raum. In diesem Fall wird das Problem der Posen-Schätzung von Menschen in unterschiedlichen Bildern betrachtet. Das bedeutet: Die erkannten Posen werden zunächst nur zweidimensional erfasst. Im Bereich der Computer Vision werden Posen oft durch sogenannte Schlüsselpunkte dargestellt. Diese Punkte liegen unter anderen an Gelenken, sodass durch die Pose die komplette Haltung des Köpers beschrieben werden kann.
+	Eine Pose ist nach der DIN EN ISO 8373 (Industrieroboter Wörterbuch) eine Kombination von Position und Orientierung im dreidimensionalen Raum. In diesem Fall wird das Problem der Posen-Schätzung von Menschen in unterschiedlichen Bildern betrachtet. Das bedeutet: Die erkannten Posen werden zunächst nur zweidimensional erfasst. Im Bereich der Computer Vision werden Posen oft durch sogenannte Schlüsselpunkte dargestellt. Diese Punkte liegen unter anderem an Gelenken, sodass durch eine Pose die komplette Haltung des Köpers beschrieben werden kann.
         Für das Benchmark des MPII Datensatzes~\cite{MPII} 
         werden zum Beispiel folgende Schlüsselpunkte verwendet:
         \begin{itemize}
@@ -46,7 +47,6 @@
 
 
 \section{Pose Machines und andere Algorithmen zur Posen-Schätzung}
-        Um die angesprochenen Probleme zu lösen, gibt es einige unterschiedliche Ansätze. %TODO: how much here?
         Die Idee der Convolutional Pose Machines~\cite{conv_pose} geht auf die Pose Machines~\cite{ramakrishna2014pose} zurück. Es handelt sich um eine Reihe von Klassifikatoren, die von vorhergegangenen Fehlern lernen, um immer bessere Schätzungen für Schlüsselpunkte zu erzeugen. 
 
         In der ersten Stufe produziert ein Klassifikator\footnote{Wenn hier von Klassifikatoren gesprochen wird, dann handelt es sich immer um einen Multi-Klassen-Klassifikator, der für alle benötigten Schlüsselpositionen Schätzungen durchführen kann.} initiale Schätzungen für die Positionen aller Schlüsselpunkte. Die Ausgabe sind sogenannte Belief Maps (siehe Abbildung~\ref{fig:pose_machine}). Die Klassifikatoren in den weiteren Stufen lernen die Belief Maps des jeweils vorigen Klassifikators zu korrigieren, indem sie von vorigen Fehlern lernen. Idealerweise entstehen am Ende dann Belief Maps die klare Maxima an den Stellen haben, die den Schlüsselpunkten im Originalbild entsprechen.
@@ -158,7 +158,7 @@
 
 \section{Evaluation}
 
-        Im Folgenden werden Testergebnisse auf dem MPII Human Pose Dataset~\cite{MPII} dargelegt. Der Datensatz besteht aus mehr als 28000 Trainingsbildern. Für das Training wurden die Daten augmentiert. Dabei wurden zufällig Rotationswinkel [-40\degree,40\degree], Skalierungsfaktoren [0.7,1.3] und horizontales Spiegeln verwendet. Als Metrik wird die PCKh\footnote{Percentage of correctly labeled Keypoints. "`h"' bedeutet, dass 50\% der Länge des Kopfsegmentes als Schwellewert für die Übereinstimmung festegelgt wird~\cite{MPII}.} Metrik verwendet. 
+        Im Folgenden werden Testergebnisse auf dem MPII Human Pose Dataset~\cite{MPII} dargelegt. Der Datensatz besteht aus mehr als 28000 Trainingsbildern. Für das Training wurden die Daten augmentiert. Dabei wurden zufällige Rotationswinkel [$-$40\degree,40\degree], Skalierungsfaktoren [0.7,1.3] und horizontales Spiegeln verwendet. Als Metrik wird die PCKh\footnote{Percentage of correctly labeled Keypoints. "`h"' bedeutet, dass 50\% der Länge des Kopfsegmentes als Schwellewert für die Übereinstimmung festgelegt wird~\cite{MPII}.} Metrik verwendet. 
         Weil in diesem Datensatz auch mehrere Personen auf einem Bild sichtbar sein können, wurden zwei Sets von Belief Maps für das Training erstellt. Eine enthält alle Peaks für jede Person in der Nähe der Hauptperson. Die Zweite enthält nur Peaks für die Schlüsselpunkte der Hauptperson.
         Die erste Art von Belief Maps wird für die Verlustfunktion der ersten Stufe verwendet, weil hier nur lokale Zusammenhänge erlernt werden. In allen weiteren Stufen wird das zweite Set verwendet, um geometritsche Relationen zwischen den Peaks richtig abzubilden.
 
